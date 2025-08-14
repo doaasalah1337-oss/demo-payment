@@ -1,0 +1,218 @@
+<!DOCTYPE html><html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>صفحة دفع تجريبية — DEMO / SANDBOX ONLY</title>
+  <!-- أمان أساسي: لا تجمع بيانات، لا ترسل أي طلبات شبكة -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self';" />
+  <style>
+    :root {
+      --bg: #0f172a;          /* slate-900 */
+      --card: #111827;        /* gray-900 */
+      --text: #e5e7eb;        /* gray-200 */
+      --muted: #9ca3af;       /* gray-400 */
+      --accent: #22c55e;      /* green-500 */
+      --danger: #ef4444;      /* red-500 */
+      --warning: #f59e0b;     /* amber-500 */
+      --border: #1f2937;      /* gray-800 */
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100svh; background: linear-gradient(160deg, #0b1220, #0f172a 40%, #0b1220);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans", Ubuntu, Cantarell, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      color: var(--text); display: grid; place-items: center; padding: 24px;
+    }
+    .wrap { width: min(920px, 100%); display: grid; gap: 24px; }
+    .badge {
+      background: linear-gradient(90deg, var(--warning), var(--danger));
+      color: #111; padding: 10px 14px; border-radius: 14px; font-weight: 800; text-align: center;
+      letter-spacing: .2px; box-shadow: 0 10px 24px rgba(0,0,0,.35);
+    }
+    .grid { display: grid; grid-template-columns: 1.2fr .8fr; gap: 24px; }
+    @media (max-width: 860px) { .grid { grid-template-columns: 1fr; } }
+    .card { background: rgba(17,24,39,.7); border: 1px solid var(--border); backdrop-filter: blur(8px); border-radius: 18px; box-shadow: 0 10px 30px rgba(0,0,0,.35); }
+    .card h2 { margin: 0 0 6px; font-size: 22px; }
+    .card .sub { color: var(--muted); font-size: 13px; margin-bottom: 18px; }
+    .card .body { padding: 20px; }
+    .row { display: grid; gap: 12px; margin-bottom: 16px; }
+    .row.cols-2 { grid-template-columns: 1fr 1fr; }
+    .label { font-size: 13px; color: var(--muted); }
+    input, select {
+      width: 100%; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--border); background: #0b1220; color: var(--text);
+      outline: none; transition: border-color .15s ease;
+    }
+    input:focus, select:focus { border-color: #334155; }
+    .hint { font-size: 12px; color: var(--muted); }
+    .error { font-size: 12px; color: var(--danger); display: none; }
+    .btn {
+      appearance: none; border: none; padding: 12px 16px; border-radius: 12px; font-weight: 700; cursor: pointer;
+      background: linear-gradient(90deg, #10b981, #22c55e); color: #0b1220; width: 100%;
+      box-shadow: 0 10px 20px rgba(16,185,129,.25);
+    }
+    .btn:disabled { opacity: .6; cursor: not-allowed; }
+    .summary { padding: 20px; }
+    .summary .line { display: flex; justify-content: space-between; margin-bottom: 10px; color: var(--muted); }
+    .summary .total { font-weight: 800; font-size: 20px; color: var(--text); }
+    .watermark {
+      position: fixed; inset: 0; pointer-events: none; display: grid; place-items: center; opacity: .06;
+      font-weight: 900; font-size: clamp(40px, 8vw, 120px); letter-spacing: 2px; text-transform: uppercase;
+    }
+    .footnote { text-align: center; color: var(--muted); font-size: 12px; }
+    .success, .fail {
+      display: none; padding: 14px; border-radius: 12px; margin-top: 12px; font-weight: 700;
+    }
+    .success { background: rgba(34,197,94,.15); border: 1px solid rgba(34,197,94,.35); color: #bbf7d0; }
+    .fail { background: rgba(239,68,68,.1); border: 1px solid rgba(239,68,68,.35); color: #fecaca; }
+    .demo-banner {
+      position: fixed; top: 12px; left: 50%; transform: translateX(-50%);
+      background: #111827; color: var(--warning); border: 1px dashed var(--warning);
+      padding: 8px 12px; border-radius: 10px; font-weight: 800; box-shadow: 0 8px 20px rgba(0,0,0,.35);
+    }
+  </style>
+</head>
+<body>
+  <div class="demo-banner">DEMO / SANDBOX ONLY — لا ترسل بيانات حقيقية</div>
+  <div class="watermark">DEMO</div>  <div class="wrap">
+    <div class="badge">هذه صفحة دفع تدريبية فقط — لا يتم حفظ أو إرسال أي بيانات. لأغراض التصميم والاختبار الداخلي.</div><div class="grid">
+  <form id="form" class="card" autocomplete="off" novalidate>
+    <div class="body">
+      <h2>الدفع</h2>
+      <div class="sub">محاكاة واجهة دفع شبيهة بالواقع — بدون معالجة دفع حقيقية.</div>
+
+      <div class="row">
+        <label class="label" for="name">الاسم على البطاقة</label>
+        <input id="name" name="name" inputmode="text" placeholder="أحمد محمد" maxlength="64" />
+      </div>
+
+      <div class="row">
+        <label class="label" for="email">البريد الإلكتروني (اختياري)</label>
+        <input id="email" name="email" type="email" placeholder="you@example.com" autocomplete="off" />
+      </div>
+
+      <div class="row">
+        <label class="label" for="card">رقم البطاقة (تجريبي)</label>
+        <input id="card" name="card" inputmode="numeric" pattern="[0-9 ]*" placeholder="4242 4242 4242 4242" aria-describedby="cardHint cardError" />
+        <div id="cardHint" class="hint">استخدم أرقام اختبار فقط (مثل 4242 4242 4242 4242). لا تدخل أي بطاقة حقيقية.</div>
+        <div id="cardError" class="error">رقم البطاقة غير صالح (تحقق Luhn).</div>
+      </div>
+
+      <div class="row cols-2">
+        <div>
+          <label class="label" for="exp">تاريخ الانتهاء</label>
+          <input id="exp" name="exp" placeholder="MM/YY" inputmode="numeric" maxlength="5" aria-describedby="expError" />
+          <div id="expError" class="error">صيغة غير صحيحة. مثال: 12/29</div>
+        </div>
+        <div>
+          <label class="label" for="cvc">CVC</label>
+          <input id="cvc" name="cvc" placeholder="123" inputmode="numeric" maxlength="4" aria-describedby="cvcError" />
+          <div id="cvcError" class="error">تحقق من الرمز.</div>
+        </div>
+      </div>
+
+      <div class="row">
+        <label class="label" for="address">العنوان (اختياري)</label>
+        <input id="address" name="address" placeholder="الشارع، المدينة" />
+      </div>
+
+      <button class="btn" id="payBtn" type="submit">محاكاة الدفع</button>
+      <div class="success" id="ok">تمت المحاكاة بنجاح — لا توجد أي عملية حقيقية.</div>
+      <div class="fail" id="bad">فشل التحقق — صحح الحقول أعلاه.</div>
+      <div class="footnote">هذه الصفحة لا تتصل بأي بوابة دفع. جميع المدخلات تبقى في المتصفح ولا تُحفظ.</div>
+    </div>
+  </form>
+
+  <aside class="card summary">
+    <div class="body">
+      <h2>الملخص</h2>
+      <div class="line"><span>العنصر</span><span>خدمة تدريبية</span></div>
+      <div class="line"><span>السعر</span><span>USD 49.00</span></div>
+      <div class="line"><span>الضريبة</span><span>USD 0.00</span></div>
+      <hr style="border: none; border-top: 1px solid var(--border); margin: 12px 0;" />
+      <div class="line total"><span>الإجمالي</span><span>USD 49.00</span></div>
+      <p class="hint" style="margin-top: 14px">يمكنك تغيير القيم حسب مشروعك. تذكّر إبقاء علامة DEMO واضحة دائماً.</p>
+    </div>
+  </aside>
+</div>
+
+  </div>  <script>
+    // لا يتم إرسال أي بيانات؛ كل شيء محلي في المتصفح.
+    const form = document.getElementById('form');
+    const card = document.getElementById('card');
+    const exp = document.getElementById('exp');
+    const cvc = document.getElementById('cvc');
+    const ok = document.getElementById('ok');
+    const bad = document.getElementById('bad');
+    const cardError = document.getElementById('cardError');
+    const expError = document.getElementById('expError');
+    const cvcError = document.getElementById('cvcError');
+
+    // تنسيق رقم البطاقة تلقائياً وإزالة أي أحرف غير رقمية
+    card.addEventListener('input', () => {
+      let v = card.value.replace(/[^0-9]/g, '').slice(0, 19);
+      card.value = v.replace(/(\d{4})(?=\d)/g, '$1 ').trim();
+    });
+
+    // تنسيق تاريخ الانتهاء MM/YY
+    exp.addEventListener('input', () => {
+      let v = exp.value.replace(/[^0-9]/g, '').slice(0, 4);
+      if (v.length >= 3) v = v.slice(0,2) + '/' + v.slice(2);
+      exp.value = v;
+    });
+
+    // تحقق Luhn بسيط
+    function luhnOk(num) {
+      const digits = num.replace(/\s+/g, '').split('').map(Number);
+      if (digits.length < 12) return false;
+      let sum = 0, alt = false;
+      for (let i = digits.length - 1; i >= 0; i--) {
+        let d = digits[i];
+        if (alt) { d *= 2; if (d > 9) d -= 9; }
+        sum += d; alt = !alt;
+      }
+      return sum % 10 === 0;
+    }
+
+    function validExp(v){
+      if (!/^\d{2}\/\d{2}$/.test(v)) return false;
+      const [m, y] = v.split('/').map(Number);
+      if (m < 1 || m > 12) return false;
+      const now = new Date();
+      const yy = now.getFullYear() % 100;
+      const mm = now.getMonth() + 1;
+      if (y < yy || (y === yy && m < mm)) return false;
+      return true;
+    }
+
+    function validCvc(v){
+      return /^\d{3,4}$/.test(v);
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      ok.style.display = 'none';
+      bad.style.display = 'none';
+      cardError.style.display = 'none';
+      expError.style.display = 'none';
+      cvcError.style.display = 'none';
+
+      const cardOk = luhnOk(card.value);
+      const expOk = validExp(exp.value);
+      const cvcOk = validCvc(cvc.value);
+
+      if (!cardOk) cardError.style.display = 'block';
+      if (!expOk) expError.style.display = 'block';
+      if (!cvcOk) cvcError.style.display = 'block';
+
+      if (cardOk && expOk && cvcOk) {
+        ok.style.display = 'block';
+        console.info('[DEMO] لا يتم إرسال أي بيانات. هذه محاكاة محلية بالكامل.');
+      } else {
+        bad.style.display = 'block';
+      }
+    });
+
+    // منع الإرسال بأي حال
+    form.setAttribute('action', '');
+    form.setAttribute('data-demo', 'true');
+  </script></body>
+</html>
